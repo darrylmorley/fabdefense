@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /shop?*
+Disallow: /category/*?*
+Allow: /shop$
+Allow: /category/
+Allow: /
+
+Sitemap: https://fabdefense.co.uk/sitemap.xml

@@ -1,0 +1,1379 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres", "nativeDistinct", "relationJoins", "typedSql"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model categories {
+  id                  Int                  @id @default(autoincrement())
+  lightspeedID        Int                  @unique @map("lightspeed_id")
+  name                String               @map("name")
+  fullPathName        String               @map("full_path_name")
+  parentID            Int?                 @map("parent_id")
+  nodeDepth           Int?                 @map("node_depth")
+  leftNode            Int?                 @map("left_node")
+  rightNode           Int?                 @map("right_node")
+  description         String?              @map("description")
+  slug                String               @unique @map("slug")
+  metaTitle           String?              @map("meta_title")
+  metaDescription     String?              @map("meta_description")
+  imageURL            String?              @map("image_url")
+  createdAt           DateTime             @default(now()) @map("created_at")
+  updatedAt           DateTime             @default(now()) @updatedAt @map("updated_at")
+  lightspeedCreatedAt DateTime?            @map("lightspeed_created_at")
+  lightspeedUpdatedAt DateTime?            @map("lightspeed_updated_at")
+  spec_type           SpecType             @default(STANDARD)
+  category_intro      String?
+  categories          categories?          @relation("categoriesTocategories", fields: [parentID], references: [lightspeedID])
+  other_categories    categories[]         @relation("categoriesTocategories")
+  category_change_log categoryChangeLog[]
+  category_overrides  category_overrides[]
+  faq                 faq[]
+  matrixProducts      matrixProducts[]
+  products            products[]
+  videos              videos[]
+
+  @@index([name])
+  @@index([parentID])
+  @@index([lightspeedID])
+  @@index([slug])
+}
+
+model manufacturers {
+  id                      Int                      @id @default(autoincrement())
+  lightspeedID            Int                      @unique @map("lightspeed_id")
+  name                    String                   @map("name")
+  description             String?                  @map("description")
+  slug                    String                   @unique @map("slug")
+  metaTitle               String?                  @map("meta_title")
+  metaDescription         String?                  @map("meta_description")
+  imageURL                String?                  @map("image_url")
+  lightspeedCreatedAt     DateTime?                @map("lightspeed_created_at")
+  lightspeedUpdatedAt     DateTime?                @map("lightspeed_updated_at")
+  createdAt               DateTime                 @default(now()) @map("created_at")
+  updatedAt               DateTime                 @default(now()) @updatedAt @map("updated_at")
+  websiteURL              String?                  @map("website_url")
+  faq                     faq[]
+  manufacturer_change_log manufacturerChangeLog[]
+  manufacturer_overrides  manufacturer_overrides[]
+  matrixProducts          matrixProducts[]
+  products                products[]
+  videos                  videos[]
+
+  @@index([name])
+  @@index([slug])
+  @@index([lightspeedID])
+  @@index([imageURL])
+}
+
+model customers {
+  id                      String                    @id @default(uuid())
+  lightspeedID            Int                       @unique @map("lightspeed_id")
+  googleID                String?                   @unique @map("google_id")
+  firstName               String?                   @map("first_name")
+  lastName                String?                   @map("last_name")
+  email                   String?                   @unique @map("email")
+  lightspeedCreatedAt     DateTime?                 @map("lightspeed_created_at")
+  lightspeedUpdatedAt     DateTime?                 @map("lightspeed_updated_at")
+  createdAt               DateTime                  @default(now()) @map("created_at")
+  updatedAt               DateTime                  @default(now()) @updatedAt @map("updated_at")
+  customerType            CustomerType              @default(NONE) @map("customer_type")
+  archived                Boolean                   @default(false)
+  address1                String?                   @map("address1")
+  address2                String?                   @map("address2")
+  city                    String?                   @map("city")
+  country                 String?                   @map("country")
+  state                   String?                   @map("state")
+  zip                     String?                   @map("zip")
+  tel                     String?                   @map("tel")
+  carts                   carts[]
+  contactSubmissions      contactSubmissions[]
+  creditAccounts          creditAccounts[]
+  financeApplications     financeApplications[]
+  restockNotifications    restockNotifications[]
+  reviews                 reviews[]
+  saleLines               saleLines[]
+  sales                   sales[]
+  web_gift_card_purchases web_gift_card_purchases[]
+
+  @@index([email])
+  @@index([googleID])
+  @@index([lightspeedID])
+}
+
+model products {
+  id                   Int                      @id @default(autoincrement())
+  lightspeedID         Int                      @unique @map("lightspeed_id")
+  matrixID             Int?                     @map("matrix_id")
+  sku                  String?                  @map("sku")
+  manufacturerSku      String?                  @map("manufacturer_sku")
+  gtin                 String?                  @map("gtin")
+  name                 String                   @map("name")
+  qoh                  Int                      @default(0) @map("qoh")
+  price                Float                    @map("price")
+  salePrice            Float                    @map("sale_price")
+  onSale               Boolean?                 @default(false) @map("on_sale")
+  isFeatured           Boolean?                 @default(false) @map("is_featured")
+  isOnBackorder        Boolean?                 @default(false) @map("is_on_backorder")
+  backorderQty         Int?                     @map("backorder_qty")
+  reorderLevel         Int?                     @map("reorder_level")
+  reorderPoint         Int?                     @map("reorder_point")
+  shortDescription     String?                  @map("short_description")
+  longDescription      String?                  @map("long_description")
+  categoryID           Int?                     @map("category_id")
+  manufacturerID       Int?                     @map("manufacturer_id")
+  colour               String?                  @map("colour")
+  size                 String?                  @map("size")
+  width                String?                  @map("width")
+  height               String?                  @map("height")
+  length               String?                  @map("length")
+  weight               String?                  @map("weight")
+  metaTitle            String?                  @map("meta_title")
+  metaDescription      String?                  @map("meta_description")
+  isPreorder           Boolean?                 @default(false) @map("is_preorder")
+  preOrderQty          Int?                     @map("pre_order_qty")
+  slug                 String?                  @unique @map("slug")
+  lightspeedCreatedAt  DateTime?                @map("lightspeed_created_at")
+  lightspeedUpdatedAt  DateTime?                @map("lightspeed_updated_at")
+  createdAt            DateTime                 @default(now()) @map("created_at")
+  updatedAt            DateTime                 @default(now()) @updatedAt @map("updated_at")
+  archived             Boolean?                 @default(false) @map("archived")
+  black_friday_sale    Boolean?                 @default(false)
+  sex                  ClothingSex?
+  search_vector        Unsupported("tsvector")? @default(dbgenerated("''::tsvector"))
+  cartItem             cartItem[]
+  faq                  faq[]
+  images               images[]
+  orderLines           orderLines[]
+  product_change_log   productChangeLog[]
+  productOverride      productOverride[]
+  product_slug_history product_slug_history[]
+  categories           categories?              @relation(fields: [categoryID], references: [lightspeedID])
+  manufacturers        manufacturers?           @relation(fields: [manufacturerID], references: [lightspeedID])
+  matrixProducts       matrixProducts?          @relation(fields: [matrixID], references: [lightspeedID])
+  restockNotifications restockNotifications[]
+  reviews              reviews[]
+  saleLines            saleLines[]
+  specs_ammo           specs_ammo?
+  specs_clothing       specs_clothing?
+  specs_firearms       specs_firearms?
+  specs_footwear       specs_footwear?
+  specs_moderators     specs_moderators?
+  specs_optics         specs_optics?
+  specs_thermal        specs_thermal?
+  videos               videos[]
+
+  @@index([categoryID])
+  @@index([manufacturerID])
+  @@index([matrixID])
+  @@index([name])
+  @@index([slug])
+  @@index([lightspeedID])
+  @@index([sku])
+  @@index([qoh])
+  @@index([onSale])
+  @@index([isFeatured])
+  @@index([black_friday_sale])
+  @@index([search_vector], map: "idx_products_search_vector", type: Gin)
+}
+
+model productOverride {
+  id               String   @id @default(uuid()) @map("id")
+  productID        Int      @map("product_id")
+  siteSlug         String   @map("site_slug")
+  title            String?  @map("title")
+  shortDescription String?  @map("short_description")
+  longDescription  String?  @map("long_description")
+  metaTitle        String?  @map("meta_title")
+  metaDescription  String?  @map("meta_description")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at")
+  product          products @relation(fields: [productID], references: [lightspeedID], onDelete: Cascade)
+
+  @@unique([productID, siteSlug])
+  @@index([productID])
+  @@index([siteSlug])
+  @@map("product_overrides")
+}
+
+model matrixProducts {
+  id                  Int            @id @default(autoincrement())
+  lightspeedID        Int            @unique @map("lightspeed_id")
+  name                String         @map("name")
+  categoryID          Int?           @map("category_id")
+  manufacturerID      Int?           @map("manufacturer_id")
+  ItemAttributeSet    Json?          @map("item_attribute_set")
+  price               Float          @map("price")
+  salePrice           Float          @map("sale_price")
+  shortDescription    String?        @map("short_description")
+  longDescription     String?        @map("long_description")
+  slug                String?        @unique @map("slug")
+  metaTitle           String?        @map("meta_title")
+  metaDescription     String?        @map("meta_description")
+  lightspeedUpdatedAt DateTime?      @map("lightspeed_updated_at")
+  createdAt           DateTime       @default(now()) @map("created_at")
+  updatedAt           DateTime       @default(now()) @updatedAt @map("updated_at")
+  archived            Boolean?       @default(false) @map("archived")
+  images              images[]
+  categories          categories?    @relation(fields: [categoryID], references: [lightspeedID])
+  manufacturers       manufacturers? @relation(fields: [manufacturerID], references: [lightspeedID])
+  products            products[]
+
+  @@index([categoryID])
+  @@index([manufacturerID])
+  @@index([name])
+  @@index([slug])
+  @@index([lightspeedID])
+  @@map("matrix_products")
+}
+
+model carts {
+  id                  String                @id @default(uuid())
+  lightspeedID        Int?                  @unique @map("lightspeed_id")
+  customerID          Int?                  @map("customer_id")
+  sessionToken        String?               @unique @map("session_token")
+  createdAt           DateTime              @default(now()) @map("created_at")
+  updatedAt           DateTime              @default(now()) @updatedAt @map("updated_at")
+  completed           Boolean               @default(false) @map("completed")
+  cancelled           Boolean               @default(false) @map("cancelled")
+  website             Website
+  cartItems           cartItem[]
+  customer            customers?            @relation(fields: [customerID], references: [lightspeedID])
+  financeApplications financeApplications[]
+  sales               sales[]
+
+  @@index([customerID])
+  @@index([sessionToken])
+  @@index([completed])
+  @@index([cancelled])
+}
+
+model cartItem {
+  id           String    @id @default(uuid())
+  lightspeedID Int?      @map("lightspeed_id")
+  cartID       String    @map("cart_id")
+  quantity     Int       @default(1) @map("quantity")
+  price        Float     @map("price")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at")
+  cart         carts     @relation(fields: [cartID], references: [id], onDelete: Cascade)
+  product      products? @relation(fields: [lightspeedID], references: [lightspeedID])
+
+  @@index([cartID])
+  @@index([lightspeedID])
+  @@map("cart_items")
+}
+
+model financeApplications {
+  id                String                   @id @default(cuid())
+  cartID            String?                  @map("cart_id")
+  lightspeedCartID  Int?                     @map("lightspeed_cart_id")
+  customerID        Int?                     @map("customer_id")
+  status            FinanceApplicationStatus @default(PENDING)
+  customerEmail     String                   @map("customer_email")
+  customerPhone     String                   @map("customer_phone")
+  submittedAt       DateTime                 @default(now()) @map("submitted_at")
+  approvedAt        DateTime?                @map("approved_at")
+  declinedAt        DateTime?                @map("declined_at")
+  createdAt         DateTime                 @default(now()) @map("created_at")
+  updatedAt         DateTime                 @updatedAt @map("updated_at")
+  applicationRef    String                   @unique @default(cuid()) @map("application_ref")
+  apr               Float                    @default(21.9)
+  billingAddress1   String                   @map("billing_address1")
+  billingAddress2   String?                  @map("billing_address2")
+  billingCity       String                   @map("billing_city")
+  billingCounty     String                   @map("billing_county")
+  billingPostcode   String                   @map("billing_postcode")
+  customerFirstName String                   @map("customer_first_name")
+  customerLastName  String                   @map("customer_last_name")
+  customerTitle     String?                  @map("customer_title")
+  depositAmount     Float                    @map("deposit_amount")
+  depositPercent    Int                      @map("deposit_percent")
+  loanAmount        Float                    @map("loan_amount")
+  monthlyPayment    Float                    @map("monthly_payment")
+  orderAmount       Float                    @map("order_amount")
+  reviewedAt        DateTime?                @map("reviewed_at")
+  termMonths        Int                      @map("term_months")
+  totalInterest     Float                    @map("total_interest")
+  totalRepayable    Float                    @map("total_repayable")
+  carts             carts?                   @relation(fields: [cartID], references: [id])
+  customers         customers?               @relation(fields: [customerID], references: [lightspeedID])
+  sales             sales[]
+
+  @@index([cartID])
+  @@index([applicationRef])
+  @@index([customerID])
+  @@index([status])
+  @@index([createdAt])
+  @@index([customerEmail])
+  @@map("finance_applications")
+}
+
+model sales {
+  id                      String                   @id @default(uuid())
+  lightspeedID            Int                      @unique @map("lightspeed_id")
+  cartID                  String?                  @map("cart_id")
+  customerID              Int?                     @map("customer_id")
+  siteSlug                String?                  @map("site_slug")
+  total                   Float                    @map("total")
+  subtotal                Float?                   @map("subtotal")
+  taxTotal                Float?                   @map("tax_total")
+  discountTotal           Float?                   @map("discount_total")
+  discountID              Int?                     @map("discount_id")
+  completed               Boolean                  @default(false) @map("completed")
+  archived                Boolean                  @default(false) @map("archived")
+  voided                  Boolean                  @default(false) @map("voided")
+  referenceNumber         String?                  @map("reference_number")
+  employeeID              Int?                     @map("employee_id")
+  shopID                  Int?                     @map("shop_id")
+  registerID              Int?                     @map("register_id")
+  lightspeedCreatedAt     DateTime?                @map("lightspeed_created_at")
+  lightspeedUpdatedAt     DateTime?                @map("lightspeed_updated_at")
+  createdAt               DateTime                 @default(now()) @map("created_at")
+  updatedAt               DateTime                 @default(now()) @updatedAt @map("updated_at")
+  completeTime            DateTime?                @map("complete_time")
+  billingAddress          Json?                    @map("billing_address")
+  guestEmail              String?                  @map("guest_email")
+  guestFirstName          String?                  @map("guest_first_name")
+  guestLastName           String?                  @map("guest_last_name")
+  shippingAddress         Json?                    @map("shipping_address")
+  finance_application_id  String?
+  payment_type_id         String[]
+  credit_account_id       Int?
+  credit_accounts         creditAccounts?
+  saleLines               saleLines[]
+  cart                    carts?                   @relation(fields: [cartID], references: [id])
+  customer                customers?               @relation(fields: [customerID], references: [lightspeedID])
+  finance_applications    financeApplications?     @relation(fields: [finance_application_id], references: [id])
+  web_gift_card_purchases web_gift_card_purchases?
+
+  @@index([cartID])
+  @@index([createdAt])
+  @@index([customerID])
+  @@index([lightspeedID])
+  @@index([completed])
+  @@index([employeeID])
+  @@index([shopID])
+  @@index([completeTime])
+  @@index([payment_type_id], type: Gin)
+  @@index([credit_account_id])
+  @@map("sales")
+}
+
+model saleLines {
+  id                      String     @id @default(uuid())
+  saleID                  Int        @map("sale_id")
+  discountID              Int?       @map("discount_id")
+  unitPrice               Float      @map("unit_price")
+  normalUnitPrice         Float?     @map("normal_unit_price")
+  discountAmount          Float?     @map("discount_amount")
+  discountPercent         Float?     @map("discount_percent")
+  tax                     Boolean    @map("tax")
+  parentSaleLineID        Int?       @map("original_sale_line_id")
+  lightspeedCreatedAt     DateTime?  @map("lightspeed_created_at")
+  lightspeedUpdatedAt     DateTime?  @map("lightspeed_updated_at")
+  createdAt               DateTime   @default(now()) @map("created_at")
+  updatedAt               DateTime   @default(now()) @updatedAt @map("updated_at")
+  avgCost                 Float?     @map("avg_cost")
+  calcLineDiscount        Float?     @map("calc_line_discount")
+  calcTotal               Float?     @map("calc_total")
+  calcTransactionDiscount Float?     @map("calc_transaction_discount")
+  customerID              Int?       @map("customer_id")
+  employeeID              Int?       @map("employee_id")
+  fifoCost                Float?     @map("fifo_cost")
+  isLayaway               Boolean    @default(false) @map("is_layaway")
+  isSpecialOrder          Boolean    @default(false) @map("is_special_order")
+  isWorkorder             Boolean    @default(false) @map("is_workorder")
+  itemID                  Int?       @map("item_id")
+  unitQuantity            Int        @map("unit_quantity")
+  lightspeedID            Int?       @unique @map("lightspeed_id")
+  customer                customers? @relation(fields: [customerID], references: [lightspeedID])
+  product                 products?  @relation(fields: [itemID], references: [lightspeedID])
+  sale                    sales      @relation(fields: [saleID], references: [lightspeedID], onDelete: Cascade)
+
+  @@index([itemID])
+  @@index([saleID])
+  @@index([lightspeedID])
+  @@index([customerID])
+  @@map("sale_lines")
+}
+
+model creditAccounts {
+  id                      Int                      @id @default(autoincrement())
+  lightspeedID            Int                      @unique @map("lightspeed_id")
+  name                    String?
+  code                    String?
+  description             String?
+  giftCard                Boolean                  @default(false) @map("gift_card")
+  balance                 Float
+  customerID              Int?                     @map("customer_id")
+  archived                Boolean
+  lightspeedUpdatedAt     DateTime?                @map("lightspeed_updated_at")
+  createdAt               DateTime                 @default(now()) @map("created_at")
+  updatedAt               DateTime                 @default(now()) @updatedAt @map("updated_at")
+  purchase_sale_id        Int?                     @unique
+  customer                customers?               @relation(fields: [customerID], references: [lightspeedID])
+  sales                   sales?                   @relation(fields: [purchase_sale_id], references: [lightspeedID])
+  web_gift_card_purchases web_gift_card_purchases?
+
+  @@index([lightspeedID])
+  @@index([code])
+  @@index([giftCard])
+  @@index([customerID])
+  @@index([purchase_sale_id])
+  @@map("credit_accounts")
+}
+
+model reviews {
+  id         String    @id @default(uuid())
+  itemID     Int       @map("item_id")
+  customerID String    @map("customer_id")
+  userEmail  String    @map("user_email")
+  rating     Int       @map("rating")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @default(now()) @updatedAt @map("updated_at")
+  reviewText String?   @map("review_text")
+  customers  customers @relation(fields: [customerID], references: [id])
+  products   products  @relation(fields: [itemID], references: [lightspeedID])
+
+  @@index([itemID])
+  @@index([rating])
+  @@index([userEmail])
+  @@index([createdAt])
+  @@index([customerID])
+}
+
+model contactSubmissions {
+  id          String     @id @default(cuid())
+  name        String
+  email       String
+  message     String
+  customerID  Int?       @map("customer_id")
+  ipAddress   String?    @map("ip_address")
+  userAgent   String?    @map("user_agent")
+  status      String     @default("new")
+  priority    String     @default("normal")
+  category    String?
+  adminNotes  String?    @map("admin_notes")
+  respondedAt DateTime?  @map("responded_at")
+  resolvedAt  DateTime?  @map("resolved_at")
+  emailSent   Boolean    @default(false) @map("email_sent")
+  emailError  String?    @map("email_error")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @default(now()) @map("updated_at")
+  customers   customers? @relation(fields: [customerID], references: [lightspeedID])
+
+  @@index([email])
+  @@index([status])
+  @@index([priority])
+  @@index([category])
+  @@index([customerID])
+  @@index([createdAt])
+  @@map("contact_submissions")
+}
+
+model orders {
+  id                  String       @id @default(uuid())
+  lightspeedID        Int          @unique @map("lightspeed_id")
+  vendorID            Int?         @map("vendor_id")
+  orderedDate         String?      @map("order_date")
+  receivedDate        String?      @map("received_date")
+  arrivalDate         String?      @map("arival_date")
+  refNum              String?      @map("ref_num")
+  taxAmount           Float?       @map("tax_amount")
+  totalCost           Float?       @map("total_cost")
+  discount            Float?       @map("discount")
+  totalDiscount       Float?       @map("total_discount")
+  totalQuantity       Int?         @map("total_quantity")
+  complete            Boolean      @default(false)
+  noteID              Int?         @map("note_id")
+  createdByID         Int?         @map("created_by_id")
+  lightspeedCreatedAt DateTime?    @map("lightspeed_created_at")
+  lightspeedUpdatedAt DateTime?    @map("lightspeed_updated_at")
+  createdAt           DateTime     @default(now()) @map("created_at")
+  updatedAt           DateTime     @default(now()) @updatedAt @map("updated_at")
+  archived            Boolean      @default(false)
+  orderLines          orderLines[]
+  vendor              vendors?     @relation(fields: [vendorID], references: [lightspeedID])
+
+  @@index([vendorID])
+  @@index([complete])
+  @@index([orderedDate])
+  @@index([lightspeedID])
+  @@index([refNum])
+  @@map("orders")
+}
+
+model orderLines {
+  id                  String    @id @default(uuid())
+  lightspeedID        Int?      @unique @map("lightspeed_id")
+  orderID             Int       @map("order_id")
+  itemID              Int?      @map("product_id")
+  quantity            Int       @map("quantity")
+  unitCost            Float     @map("unit_cost")
+  discount            Float?    @default(0) @map("discount")
+  lightspeedCreatedAt DateTime? @map("lightspeed_created_at")
+  lightspeedUpdatedAt DateTime? @map("lightspeed_updated_at")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @default(now()) @updatedAt @map("updated_at")
+  price               Float     @map("price")
+  qtyReceived         Int?      @map("qty_received")
+  total               Float     @map("total")
+  order               orders    @relation(fields: [orderID], references: [lightspeedID], onDelete: Cascade)
+  product             products? @relation(fields: [itemID], references: [lightspeedID])
+
+  @@index([orderID])
+  @@index([itemID])
+  @@index([lightspeedID])
+  @@map("order_lines")
+}
+
+model vendors {
+  id                  Int       @id @default(autoincrement())
+  lightspeedID        Int       @unique @map("lightspeed_id")
+  companyName         String    @map("company_name")
+  contactName         String?   @map("contact_name")
+  email               String?   @map("email")
+  phone               String?   @map("phone")
+  address1            String?   @map("address1")
+  address2            String?   @map("address2")
+  city                String?   @map("city")
+  state               String?   @map("state")
+  zip                 String?   @map("zip")
+  country             String?   @map("country")
+  accountNumber       String?   @map("account_number")
+  active              Boolean   @default(true)
+  lightspeedCreatedAt DateTime? @map("lightspeed_created_at")
+  lightspeedUpdatedAt DateTime? @map("lightspeed_updated_at")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @default(now()) @updatedAt @map("updated_at")
+  orders              orders[]
+
+  @@index([companyName])
+  @@index([lightspeedID])
+  @@index([active])
+}
+
+model restockNotifications {
+  id         String             @id @default(uuid())
+  itemID     Int                @map("item_id")
+  customerID String?            @map("customer_id")
+  status     NotificationStatus @default(PENDING) @map("status")
+  createdAt  DateTime           @default(now()) @map("created_at")
+  updatedAt  DateTime           @default(now()) @updatedAt @map("updated_at")
+  email      String             @map("email")
+  firstName  String?            @map("first_name")
+  lastName   String?            @map("last_name")
+  customers  customers?         @relation(fields: [customerID], references: [id])
+  products   products           @relation(fields: [itemID], references: [lightspeedID])
+
+  @@index([itemID])
+  @@index([customerID])
+  @@index([status])
+  @@index([createdAt])
+  @@map("restock_notifications")
+}
+
+model images {
+  id                  String          @id @default(uuid())
+  lightspeedID        Int             @unique @map("lightspeed_id")
+  description         String?
+  filename            String
+  ordering            Int             @default(0)
+  publicID            String          @map("public_id")
+  baseImageURL        String          @map("base_image_url")
+  size                Int?
+  itemID              Int?            @map("item_id")
+  itemMatrixID        Int?            @map("item_matrix_id")
+  lightspeedCreatedAt DateTime?       @map("lightspeed_created_at")
+  lightspeedUpdatedAt DateTime?       @map("lightspeed_updated_at")
+  createdAt           DateTime        @default(now()) @map("created_at")
+  updatedAt           DateTime        @default(now()) @updatedAt @map("updated_at")
+  largeUrl            String?         @map("large_url")
+  mediumUrl           String?         @map("medium_url")
+  originalUrl         String?         @map("original_url")
+  thumbnailUrl        String?         @map("thumbnail_url")
+  product             products?       @relation(fields: [itemID], references: [lightspeedID], onDelete: Cascade)
+  matrixProduct       matrixProducts? @relation(fields: [itemMatrixID], references: [lightspeedID], onDelete: Cascade)
+
+  @@index([itemID])
+  @@index([itemMatrixID])
+  @@index([lightspeedID])
+  @@index([ordering])
+  @@map("images")
+}
+
+model categoryChangeLog {
+  id               Int        @id @default(autoincrement())
+  category_id      Int
+  field_name       String?
+  old_value        String?
+  new_value        String?
+  change_timestamp DateTime   @default(now()) @db.Timestamptz(6)
+  categories       categories @relation(fields: [category_id], references: [lightspeedID], onDelete: Cascade, onUpdate: NoAction, map: "category_change_log_category_id_fk")
+
+  @@map("category_change_log")
+}
+
+model manufacturerChangeLog {
+  id               Int           @id @default(autoincrement())
+  manufacturer_id  Int
+  field_name       String?
+  old_value        String?
+  new_value        String?
+  change_timestamp DateTime      @default(now()) @db.Timestamptz(6)
+  manufacturers    manufacturers @relation(fields: [manufacturer_id], references: [lightspeedID], onDelete: Cascade, onUpdate: NoAction, map: "manufacturer_change_log_manufacturer_id_fk")
+
+  @@map("manufacturer_change_log")
+}
+
+model productChangeLog {
+  id               Int      @id @default(autoincrement())
+  product_id       Int
+  field_name       String?
+  old_value        Json?
+  new_value        Json?
+  change_timestamp DateTime @default(now()) @db.Timestamptz(6)
+  products         products @relation(fields: [product_id], references: [lightspeedID], onDelete: Cascade, onUpdate: NoAction, map: "product_change_log_product_id_fk")
+
+  @@map("product_change_log")
+}
+
+model syncJobs {
+  id          String        @id @default(uuid())
+  entityType  EntityType    @map("entity_type")
+  direction   SyncDirection
+  status      SyncStatus    @default(PENDING)
+  startedAt   DateTime      @default(now()) @map("started_at")
+  completedAt DateTime?     @map("completed_at")
+  totalItems  Int?          @map("total_items")
+  processed   Int           @default(0)
+  successful  Int           @default(0)
+  failed      Int           @default(0)
+  errors      Json?
+  metadata    Json?
+  syncType    SyncType?     @map("sync_type")
+  syncRecords syncRecords[]
+
+  @@index([entityType])
+  @@index([status])
+  @@index([startedAt])
+  @@index([direction])
+  @@map("sync_jobs")
+}
+
+model syncRecords {
+  id             String        @id @default(uuid())
+  syncJobId      String        @map("sync_job_id")
+  entityType     EntityType    @map("entity_type")
+  lightspeedId   Int           @map("lightspeed_id")
+  localId        String?       @map("local_id")
+  operation      String
+  status         SyncStatus    @default(PENDING)
+  direction      SyncDirection
+  errorMessage   String?       @map("error_message")
+  conflictData   Json?         @map("conflict_data")
+  lastSyncedAt   DateTime      @default(now()) @map("last_synced_at")
+  lightspeedHash String?       @map("lightspeed_hash")
+  localHash      String?       @map("local_hash")
+  retryCount     Int           @default(0) @map("retry_count")
+  syncJob        syncJobs      @relation(fields: [syncJobId], references: [id], onDelete: Cascade)
+
+  @@unique([syncJobId, lightspeedId, entityType])
+  @@index([lightspeedId])
+  @@index([entityType])
+  @@index([status])
+  @@index([lastSyncedAt])
+  @@index([syncJobId])
+  @@index([direction])
+  @@map("sync_records")
+}
+
+model syncErrors {
+  id           Int                 @id @default(autoincrement())
+  syncJobId    String?             @map("sync_job_id")
+  syncRecordId String?             @map("sync_record_id")
+  entityType   EntityType          @map("entity_type")
+  lightspeedId Int?                @map("lightspeed_id")
+  localId      String?             @map("local_id")
+  operation    SyncErrorOperation? @map("operation")
+  errorType    ErrorType           @map("error_type")
+  errorCode    String?             @map("error_code")
+  errorMessage String              @map("error_message")
+  stackTrace   String?             @map("stack_trace")
+  requestData  Json?               @map("request_data")
+  responseData Json?               @map("response_data")
+  retryCount   Int                 @default(0) @map("retry_count")
+  resolved     Boolean             @default(false)
+  resolvedAt   DateTime?           @map("resolved_at")
+  resolvedBy   String?             @map("resolved_by")
+  notes        String?
+  createdAt    DateTime            @default(now()) @map("created_at")
+  updatedAt    DateTime            @default(now()) @updatedAt @map("updated_at")
+
+  @@index([syncJobId])
+  @@index([syncRecordId])
+  @@index([entityType])
+  @@index([lightspeedId])
+  @@index([errorType])
+  @@index([resolved])
+  @@index([createdAt])
+  @@map("sync_errors")
+}
+
+model syncSettings {
+  id                  String     @id @default(uuid())
+  entityType          EntityType @unique @map("entity_type")
+  syncEnabled         Boolean    @default(true) @map("sync_enabled")
+  syncInterval        Int?       @map("sync_interval")
+  batchSize           Int        @default(100) @map("batch_size")
+  conflictResolution  String     @default("MANUAL") @map("conflict_resolution")
+  lastFullSync        DateTime?  @map("last_full_sync")
+  lastIncrementalSync DateTime?  @map("last_incremental_sync")
+  webhookEnabled      Boolean    @default(false) @map("webhook_enabled")
+  retryLimit          Int        @default(3) @map("retry_limit")
+
+  @@map("sync_settings")
+}
+
+model syncSkippedRecords {
+  id             String     @id @default(uuid())
+  entityType     EntityType @map("entity_type")
+  lightspeedId   Int        @map("lightspeed_id")
+  skipReason     SkipReason @map("skip_reason")
+  lightspeedData Json       @map("lightspeed_data")
+  retryCount     Int        @default(0) @map("retry_count")
+  maxRetries     Int        @default(10) @map("max_retries")
+  lastRetryAt    DateTime?  @map("last_retry_at")
+  resolvedAt     DateTime?  @map("resolved_at")
+  errorMessage   String?    @map("error_message")
+  metadata       Json?
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @default(now()) @updatedAt @map("updated_at")
+
+  @@unique([entityType, lightspeedId])
+  @@index([entityType])
+  @@index([skipReason])
+  @@index([resolvedAt])
+  @@index([retryCount])
+  @@index([createdAt])
+  @@index([entityType, resolvedAt, retryCount])
+  @@map("sync_skipped_records")
+}
+
+model lightspeedTokens {
+  id           Int       @id @default(autoincrement())
+  accessToken  String    @map("access_token")
+  refreshToken String    @map("refresh_token")
+  expiresAt    DateTime? @map("expires_at")
+  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  @@index([expiresAt])
+  @@index([accessToken])
+  @@index([refreshToken])
+  @@index([updatedAt])
+  @@map("lightspeed_tokens")
+}
+
+model emailQueue {
+  id           String      @id @default(uuid())
+  to           Json
+  from         Json?
+  cc           Json?
+  bcc          Json?
+  subject      String
+  html         String?
+  text         String?
+  templateId   String?     @map("template_id")
+  templateData Json?       @map("template_data")
+  category     String
+  priority     String      @default("normal")
+  status       EmailStatus @default(PENDING)
+  attempts     Int         @default(0)
+  maxAttempts  Int         @default(3) @map("max_attempts")
+  scheduledAt  DateTime?   @map("scheduled_at")
+  sentAt       DateTime?   @map("sent_at")
+  deliveredAt  DateTime?   @map("delivered_at")
+  lastError    String?     @map("last_error")
+  messageId    String?     @map("message_id")
+  metadata     Json?
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @default(now()) @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([category])
+  @@index([priority])
+  @@index([scheduledAt])
+  @@index([createdAt])
+  @@map("email_queue")
+}
+
+model emailTemplates {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  subject   String
+  html      String
+  text      String?
+  category  String
+  variables Json?
+  isActive  Boolean  @default(true) @map("is_active")
+  version   Int      @default(1)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@index([name])
+  @@index([category])
+  @@index([isActive])
+  @@map("email_templates")
+}
+
+model notificationSettings {
+  id                String     @id @default(uuid())
+  entityType        EntityType @unique @map("entity_type")
+  enabled           Boolean    @default(false)
+  emailTemplate     String?    @map("email_template")
+  emailSubject      String?    @map("email_subject")
+  recipients        String     @default("[]")
+  batchNotification Boolean    @default(false) @map("batch_notification")
+  batchDelayMinutes Int        @default(30) @map("batch_delay_minutes")
+  fieldsToInclude   String     @default("[]")
+  createdAt         DateTime   @default(now()) @map("created_at")
+  updatedAt         DateTime   @default(now()) @updatedAt @map("updated_at")
+
+  @@index([enabled])
+  @@map("notification_settings")
+}
+
+model web_gift_card_purchases {
+  id                     String         @id
+  purchaser_customer_id  Int?
+  purchaser_email        String
+  purchaser_name         String?
+  recipient_email        String
+  recipient_name         String?
+  personal_message       String?
+  amount                 Float
+  gift_card_code         String         @unique
+  credit_account_id      Int            @unique
+  sale_id                Int            @unique
+  payment_reference      String?
+  paymentStatus          PaymentStatus  @default(PENDING)
+  payment_completed_at   DateTime?
+  deliveryStatus         DeliveryStatus @default(PENDING)
+  delivery_scheduled_for DateTime?
+  delivered_at           DateTime?
+  email_queue_id         String?
+  metadata               Json?
+  created_at             DateTime       @default(now())
+  updated_at             DateTime
+  credit_accounts        creditAccounts @relation(fields: [credit_account_id], references: [lightspeedID])
+  customers              customers?     @relation(fields: [purchaser_customer_id], references: [lightspeedID])
+  sales                  sales          @relation(fields: [sale_id], references: [lightspeedID])
+
+  @@index([created_at])
+  @@index([credit_account_id])
+  @@index([deliveryStatus])
+  @@index([paymentStatus])
+  @@index([purchaser_customer_id])
+  @@index([recipient_email])
+  @@index([sale_id])
+}
+
+model promotion_products {
+  id           String     @id
+  promotion_id Int
+  product_id   Int
+  promotions   promotions @relation(fields: [promotion_id], references: [id], onDelete: Cascade)
+
+  @@unique([promotion_id, product_id])
+  @@index([product_id])
+}
+
+model promotions {
+  id                      Int                  @id @default(autoincrement())
+  name                    String
+  description             String?
+  discount_percent        Float?
+  discount_amount         Float?
+  active_from             DateTime
+  active_until            DateTime
+  enabled                 Boolean              @default(true)
+  archived                Boolean              @default(false)
+  target_all_products     Boolean              @default(false)
+  target_manufacturer_ids Int[]
+  target_category_ids     Int[]
+  created_at              DateTime             @default(now())
+  updated_at              DateTime
+  promotion_products      promotion_products[]
+
+  @@index([active_from])
+  @@index([active_until])
+  @@index([archived])
+  @@index([enabled])
+}
+
+model faq {
+  id              String         @id
+  question        String
+  answer          String
+  item_id         Int
+  category_id     Int?
+  manufacturer_id Int?
+  is_standalone   Boolean        @default(false)
+  created_at      DateTime       @default(now())
+  updated_at      DateTime       @default(now())
+  categories      categories?    @relation(fields: [category_id], references: [lightspeedID], onDelete: Cascade)
+  products        products       @relation(fields: [item_id], references: [lightspeedID], onDelete: Cascade)
+  manufacturers   manufacturers? @relation(fields: [manufacturer_id], references: [lightspeedID], onDelete: Cascade)
+
+  @@index([created_at])
+}
+
+model product_slug_history {
+  id         Int      @id @default(autoincrement())
+  old_slug   String   @unique
+  product_id Int
+  created_at DateTime @default(now())
+  products   products @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@index([old_slug])
+  @@index([product_id])
+}
+
+model redirects {
+  id          Int      @id @default(autoincrement())
+  source      String   @unique
+  destination String
+  permanent   Boolean  @default(true)
+  created_at  DateTime @default(now())
+
+  @@index([source])
+}
+
+model specs_ammo {
+  id                    Int      @id @default(autoincrement())
+  product_id            Int      @unique
+  caliber               String?
+  bullet_weight_gr      Float?
+  bullet_type           String?
+  muzzle_velocity_fps   Int?
+  muzzle_energy_ft_lbs  Int?
+  ballistic_coefficient Float?
+  casing_material       String?
+  primer_type           String?
+  rounds_per_box        Int?
+  is_lead_free          Boolean  @default(false)
+  is_subsonic           Boolean  @default(false)
+  created_at            DateTime @default(now())
+  updated_at            DateTime @default(now())
+  products              products @relation(fields: [product_id], references: [lightspeedID], onDelete: Cascade)
+
+  @@index([bullet_type])
+  @@index([caliber])
+  @@index([product_id])
+}
+
+model specs_clothing {
+  id                   Int          @id @default(autoincrement())
+  product_id           Int          @unique
+  size                 String?
+  chest_cm             Float?
+  waist_cm             Float?
+  hips_cm              Float?
+  sleeve_length_cm     Float?
+  inseam_cm            Float?
+  neck_cm              Float?
+  clothing_sex         ClothingSex?
+  material             String?
+  care_instructions    String?
+  waterproof_rating    Int?
+  breathability_rating Int?
+  weight_grams         Float?
+  created_at           DateTime     @default(now())
+  updated_at           DateTime     @default(now())
+  products             products     @relation(fields: [product_id], references: [lightspeedID], onDelete: Cascade)
+
+  @@index([clothing_sex])
+  @@index([product_id])
+  @@index([size])
+}
+
+model specs_firearms {
+  id                    Int           @id @default(autoincrement())
+  product_id            Int           @unique
+  caliber               String?
+  action                String?
+  mechanism             String?
+  barrel_length_inches  Float?
+  overall_length_inches Float?
+  weight_lbs            Float?
+  magazine_capacity     String?
+  trigger_type          String?
+  safety                String?
+  stock_material        String?
+  stock_finish          String?
+  orientation           String?
+  is_threaded           Boolean       @default(false)
+  thread_size           String?
+  legal_category        LegalCategory @default(UNRESTRICTED)
+  created_at            DateTime      @default(now())
+  updated_at            DateTime      @default(now())
+  products              products      @relation(fields: [product_id], references: [lightspeedID], onDelete: Cascade)
+
+  @@index([action])
+  @@index([caliber])
+  @@index([orientation])
+  @@index([product_id])
+}
+
+model specs_footwear {
+  id               Int      @id @default(autoincrement())
+  product_id       Int      @unique
+  size_uk          Float?
+  size_eu          Int?
+  width            String?
+  height_inches    Float?
+  weight_grams     Int?
+  upper_material   String?
+  lining_material  String?
+  sole_material    String?
+  is_waterproof    Boolean  @default(false)
+  is_insulated     Boolean  @default(false)
+  stiffness_rating String?
+  created_at       DateTime @default(now())
+  updated_at       DateTime @default(now())
+  products         products @relation(fields: [product_id], references: [lightspeedID], onDelete: Cascade)
+
+  @@index([product_id])
+  @@index([size_uk])
+}
+
+model specs_moderators {
+  id              Int           @id @default(autoincrement())
+  product_id      Int           @unique
+  thread_size     String?
+  max_caliber     String?
+  diameter_mm     Float?
+  length_mm       Float?
+  added_length_mm Float?
+  weight_grams    Int?
+  material        String?
+  is_baffleless   Boolean       @default(false)
+  mount_type      String?
+  is_over_barrel  Boolean       @default(false)
+  legal_category  LegalCategory @default(UNRESTRICTED)
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @default(now())
+  products        products      @relation(fields: [product_id], references: [lightspeedID], onDelete: Cascade)
+
+  @@index([max_caliber])
+  @@index([product_id])
+  @@index([thread_size])
+}
+
+model specs_optics {
+  id                   Int            @id @default(autoincrement())
+  product_id           Int            @unique
+  magnification_string String?
+  min_magnification    Float?
+  max_magnification    Float?
+  objective_mm         Int?
+  tube_diameter_mm     Int?
+  length_mm            Float?
+  weight_grams         Float?
+  created_at           DateTime       @default(now())
+  updated_at           DateTime
+  adj_per_rotation     Float?
+  adjustmentUnit       AdjustmentUnit @default(MRAD)
+  click_value          Float?
+  elevation_max        Float?
+  exit_pupil_mm        String?
+  eye_relief_string    String?
+  fogProof             Boolean        @default(false)
+  fov_string           String?
+  illumination_info    String?
+  is_illuminated       Boolean        @default(false)
+  light_transmission   Float?
+  min_parallax_yds     Float?
+  mounting_length_mm   Float?
+  ocular_mm            Float?
+  parallax_correction  String?
+  reticle_name         String?
+  reticle_type         String?
+  shockProof           Boolean        @default(false)
+  submersion_tightness String?
+  turret_type          String?
+  waterProof           Boolean        @default(false)
+  windage_max          Float?
+  focal_plane          FocalPlane     @default(SFP)
+  products             products       @relation(fields: [product_id], references: [lightspeedID], onDelete: Cascade)
+
+  @@index([objective_mm])
+  @@index([product_id])
+  @@index([tube_diameter_mm])
+  @@index([adjustmentUnit])
+  @@index([focal_plane])
+  @@index([min_magnification, max_magnification])
+  @@index([min_parallax_yds])
+  @@index([weight_grams])
+}
+
+model videos {
+  id              String         @id
+  item_id         Int?
+  url             String
+  description     String?
+  created_at      DateTime       @default(now())
+  updated_at      DateTime       @default(now())
+  title           String?
+  category_id     Int?
+  manufacturer_id Int?
+  categories      categories?    @relation(fields: [category_id], references: [lightspeedID], onDelete: Cascade)
+  products        products?      @relation(fields: [item_id], references: [lightspeedID], onDelete: Cascade)
+  manufacturers   manufacturers? @relation(fields: [manufacturer_id], references: [lightspeedID], onDelete: Cascade)
+
+  @@index([item_id])
+}
+
+model specs_thermal {
+  id                    Int      @id @default(autoincrement())
+  product_id            Int      @unique
+  sensor_type           String?
+  sensor_resolution     String?
+  pixel_pitch           Int?
+  netd                  Float?
+  refresh_rate          Int?
+  spectral_response     String?
+  lens_focal_length     Int?
+  aperture              String?
+  detection_range       Int?
+  magnification_base    Float?
+  magnification_digital String?
+  field_of_view         String?
+  min_focus_distance    Float?
+  display_type          String?
+  display_resolution    String?
+  colour_palettes       String?
+  image_enhancement     String?
+  has_lrf               Boolean  @default(false)
+  lrf_range             Int?
+  lrf_accuracy          String?
+  battery_type          String?
+  battery_life          Float?
+  storage_gb            Int?
+  charging_interface    String?
+  wifi                  Boolean  @default(false)
+  app_compatibility     String?
+  audio_recording       Boolean  @default(false)
+  weight_grams          Float?
+  dimensions            String?
+  ip_rating             String?  @default("IP67")
+  operating_temp        String?
+  created_at            DateTime @default(now())
+  updated_at            DateTime
+  products              products @relation(fields: [product_id], references: [lightspeedID], onDelete: Cascade)
+}
+
+model category_overrides {
+  id               String     @id
+  category_id      Int
+  site_slug        String
+  category_intro   String?
+  description      String?
+  meta_title       String?
+  meta_description String?
+  created_at       DateTime   @default(now())
+  updated_at       DateTime   @default(now())
+  categories       categories @relation(fields: [category_id], references: [lightspeedID], onDelete: Cascade)
+
+  @@unique([category_id, site_slug])
+  @@index([category_id])
+  @@index([site_slug])
+}
+
+model manufacturer_overrides {
+  id               String        @id
+  manufacturer_id  Int
+  site_slug        String
+  description      String?
+  meta_title       String?
+  meta_description String?
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @default(now())
+  manufacturers    manufacturers @relation(fields: [manufacturer_id], references: [lightspeedID], onDelete: Cascade)
+
+  @@unique([manufacturer_id, site_slug])
+  @@index([manufacturer_id])
+  @@index([site_slug])
+}
+
+enum NotificationStatus {
+  PENDING
+  NOTIFIED
+  FAILED
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  CANCELLED
+  REFUNDED
+}
+
+enum SyncDirection {
+  TO_LIGHTSPEED
+  FROM_LIGHTSPEED
+  BIDIRECTIONAL
+}
+
+enum SyncStatus {
+  PENDING
+  IN_PROGRESS
+  SUCCESS
+  FAILED
+  PARTIAL
+  CONFLICT
+}
+
+enum SyncType {
+  FULL
+  INCREMENTAL
+}
+
+enum EntityType {
+  PRODUCT
+  CATEGORY
+  MANUFACTURER
+  CUSTOMER
+  SALE
+  SALE_LINE
+  MATRIX_PRODUCT
+  ORDER
+  ORDER_LINE
+  VENDOR
+  CREDIT_ACCOUNT
+  IMAGE
+  PROMOTION
+}
+
+enum EmailStatus {
+  PENDING
+  SENT
+  FAILED
+  BOUNCED
+  DELIVERED
+  OPENED
+  CLICKED
+}
+
+enum Website {
+  SHOOTINGSUPPLIES
+  FABDEFENSE
+  ERGOGRIPS
+  HOLOSUN
+  UTG
+}
+
+enum CustomerType {
+  BUSINESS
+  WEB
+  GIFTCARD
+  NONE
+}
+
+enum ErrorType {
+  UNKNOWN
+  API_ERROR
+  DATABASE_ERROR
+  NETWORK_ERROR
+  VALIDATION_ERROR
+  AUTHENTICATION_ERROR
+  AUTHORIZATION_ERROR
+  NOT_FOUND_ERROR
+  CONFLICT_ERROR
+  SERVER_ERROR
+}
+
+enum SyncErrorOperation {
+  CREATE
+  UPDATE
+  DELETE
+  FETCH
+}
+
+enum SkipReason {
+  MISSING_PARENT_SALE
+  MISSING_PARENT_ORDER
+  MISSING_PRODUCT
+  MISSING_CUSTOMER
+  VALIDATION_FAILED
+  OTHER
+  INVALID_DATA
+}
+
+enum FinanceApplicationStatus {
+  PENDING
+  SUBMITTED
+  EXPIRED
+  APPROVED
+  DECLINED
+  FAILED
+}
+
+enum DeliveryStatus {
+  PENDING
+  SCHEDULED
+  SENT
+  FAILED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum ClothingSex {
+  MALE
+  FEMALE
+  UNISEX
+}
+
+enum LegalCategory {
+  SECTION_1
+  SECTION_2
+  SECTION_5
+  SECTION_58_2
+  AIR_SUB_12
+  AIR_SUB_6
+  FAC_AIR
+  UNRESTRICTED
+}
+
+enum SpecType {
+  OPTICS
+  AMMO
+  CLOTHING
+  FOOTWEAR
+  FIREARMS
+  MODERATORS
+  STANDARD
+  THERMAL
+}
+
+enum AdjustmentUnit {
+  MRAD
+  MOA
+}
+
+enum FocalPlane {
+  FFP
+  SFP
+}
