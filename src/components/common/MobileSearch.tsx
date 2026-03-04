@@ -19,7 +19,7 @@ export default function MobileSearch() {
   };
 
   useEffect(() => {
-    const handleToggle = (e: CustomEvent) => {
+    const handleToggle = () => {
       setIsOpen(true);
     };
 

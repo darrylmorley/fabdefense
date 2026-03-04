@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import PageHeader from "@/components/ui/PageHeader";
 import VideoGallery from "@/components/media/VideoGallery";
 import { config } from "@/config/config";
@@ -67,13 +68,13 @@ export default function MediaPage() {
               {images.map((image) => (
                 <div
                   key={image.src}
-                  className="aspect-video overflow-hidden bg-fab-charcoal"
+                  className="relative aspect-video overflow-hidden bg-fab-charcoal"
                 >
-                  <img
+                  <Image
                     src={image.src}
                     alt={image.alt}
-                    loading="lazy"
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                 </div>
               ))}

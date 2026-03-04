@@ -42,7 +42,6 @@ export default function PageHeader({
 
         {description && (
           <div
-            /* eslint-disable-next-line react/no-danger */
             dangerouslySetInnerHTML={{ __html: description }}
             className="text-content-text-secondary text-base leading-relaxed mt-3 font-body"
           />

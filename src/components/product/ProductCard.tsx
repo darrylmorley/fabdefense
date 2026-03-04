@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { ProductForCard } from "@/types";
 
 interface Props {
@@ -25,7 +26,7 @@ export default function ProductCard({ product, loading = "lazy" }: Props) {
     >
       {/* Image area with pedestal shadow */}
       <div className="aspect-square bg-white p-4 overflow-hidden flex items-center justify-center">
-        <img
+        <Image
           src={imageUrl}
           alt={product.name}
           width={300}

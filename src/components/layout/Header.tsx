@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import logo from "@/assets/images/fab-defense-logo.webp";
 import MobileNav from "@/components/common/MobileNav";
 import CartBadge from "@/components/common/CartBadge";
@@ -34,7 +35,7 @@ export default function Header() {
         <header className="bg-white border-b border-content-border shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-6">
             {/* Logo */}
-            <a href="/" className="shrink-0">
+            <Link href="/" className="shrink-0">
               <Image
                 src={logo}
                 alt="FAB Defense UK"
@@ -43,7 +44,7 @@ export default function Header() {
                 className="h-14 md:h-[70px] w-auto"
                 loading="eager"
               />
-            </a>
+            </Link>
 
             {/* Right — Search + Cart + Mobile hamburger */}
             <div className="flex items-center gap-2">

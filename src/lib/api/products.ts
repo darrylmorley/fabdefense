@@ -1,4 +1,5 @@
 import { prisma } from "../prisma";
+import { Prisma } from "@prisma/client";
 import { FAB_DEFENSE_MANUFACTURER_ID, SITE_SLUG } from "../../config/config";
 import { HIDDEN_CATEGORY_IDS } from "../constants";
 import { logger } from "../logging/logger";
@@ -252,7 +253,7 @@ export async function getProductsByIds(lightspeedIds: number[]) {
       },
     });
 
-    const formattedProducts = products.map((p: any) => ({
+    const formattedProducts = products.map((p) => ({
       id: p.id,
       name: formatProductName(p.name),
       slug: p.slug,
@@ -264,7 +265,7 @@ export async function getProductsByIds(lightspeedIds: number[]) {
       categoryID: p.categoryID,
       manufacturerName: p.manufacturers?.name,
       images:
-        p.images?.map((img: any) => ({
+        p.images?.map((img) => ({
           itemID: img.itemID,
           thumbnailUrl: img.thumbnailUrl,
           mediumUrl: img.mediumUrl,
@@ -290,7 +291,7 @@ export async function getShopProducts({
   limit?: number;
 }) {
   try {
-    const where: any = {
+    const where: Prisma.productsWhereInput = {
       manufacturerID: FAB_DEFENSE_MANUFACTURER_ID,
       archived: false,
       images: { some: {} },
@@ -326,7 +327,7 @@ export async function getShopProducts({
       prisma.products.count({ where }),
     ]);
 
-    const formattedProducts = products.map((p: any) => ({
+    const formattedProducts = products.map((p) => ({
       id: p.id,
       name: formatProductName(p.name),
       slug: p.slug,
@@ -338,7 +339,7 @@ export async function getShopProducts({
       categoryID: p.categoryID,
       manufacturerName: p.manufacturers?.name,
       images:
-        p.images?.map((img: any) => ({
+        p.images?.map((img) => ({
           itemID: img.itemID,
           thumbnailUrl: img.thumbnailUrl,
           mediumUrl: img.mediumUrl,

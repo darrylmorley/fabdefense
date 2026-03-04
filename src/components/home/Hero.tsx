@@ -1,3 +1,4 @@
+import Image from "next/image";
 import heroImage from "@/assets/images/fab-defense-ultimag_2.webp";
 
 export default function Hero() {
@@ -54,12 +55,12 @@ export default function Hero() {
               {/* Front card */}
               <div className="relative bg-white border border-content-border rotate-3 shadow-md flex items-center justify-center w-150 h-100">
                 <div className="w-full h-full">
-                  <img
-                    src={heroImage.src}
+                  <Image
+                    src={heroImage}
                     alt="Ultimag on ice!"
                     width={800}
                     height={800}
-                    loading="eager"
+                    priority
                     className="object-fill w-full h-full"
                   />
                 </div>

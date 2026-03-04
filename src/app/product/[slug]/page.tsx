@@ -60,7 +60,7 @@ export default async function ProductPage({
   const longDescription = product.longDescription || null;
   const description = shortDescription || longDescription || null;
 
-  const relatedCards: ProductForCard[] = relatedProducts.map((p: any) => ({
+  const relatedCards: ProductForCard[] = relatedProducts.map((p) => ({
     id: p.id,
     name: p.name,
     slug: p.slug,
@@ -72,7 +72,7 @@ export default async function ProductPage({
     categoryID: p.categoryID,
     manufacturerName: p.manufacturers?.name,
     images:
-      p.images?.map((img: any) => ({
+      p.images?.map((img) => ({
         itemID: img.itemID,
         thumbnailUrl: img.thumbnailUrl,
         mediumUrl: img.mediumUrl,
@@ -83,8 +83,8 @@ export default async function ProductPage({
 
   const productUrl = `${config.siteUrl}/product/${product.slug}`;
   const allImages = images
-    .map((img: any) => img.largeUrl || img.mediumUrl || img.thumbnailUrl)
-    .filter(Boolean);
+    .map((img) => img.largeUrl || img.mediumUrl || img.thumbnailUrl)
+    .filter((url): url is string => Boolean(url));
 
   const priceValidUntil = new Date(new Date().getFullYear() + 1, 0, 1)
     .toISOString()

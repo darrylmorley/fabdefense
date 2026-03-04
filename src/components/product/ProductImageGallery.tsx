@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 interface ProductImage {
   thumbnailUrl: string | null;
@@ -24,9 +25,11 @@ export default function ProductImageGallery({ images, productName }: Props) {
       {/* Main image */}
       <div className="aspect-square bg-content-surface border border-content-border overflow-hidden flex items-center justify-center p-6">
         {mainImage ? (
-          <img
+          <Image
             src={mainImage}
             alt={productName}
+            width={500}
+            height={500}
             className="max-w-full max-h-full object-contain"
           />
         ) : (
@@ -68,11 +71,12 @@ export default function ProductImageGallery({ images, productName }: Props) {
                     : "border-content-border hover:border-content-border-hover"
                 }`}
               >
-                <img
+                <Image
                   src={thumbSrc}
                   alt={`${productName} - Image ${index + 1}`}
+                  width={80}
+                  height={80}
                   className="w-full h-full object-contain"
-                  loading="lazy"
                 />
               </button>
             );

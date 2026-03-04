@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCart } from "@/context/CartContext";
 import type { CartItem } from "@/types";
 
@@ -89,11 +90,12 @@ export default function OrderSummary() {
             <div key={item.id} className="flex gap-3 py-3 first:pt-0">
               <div className="shrink-0 w-14 h-14 bg-content-bg overflow-hidden flex items-center justify-center">
                 {imageUrl ? (
-                  <img
+                  <Image
                     src={imageUrl}
                     alt={item.product.name}
+                    width={56}
+                    height={56}
                     className="w-full h-full object-contain"
-                    loading="lazy"
                   />
                 ) : (
                   <svg

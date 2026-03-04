@@ -28,7 +28,7 @@ class FileCache {
       if (cacheData && this.isValid(cacheData)) {
         return cacheData.data;
       }
-    } catch (error) {
+    } catch {
       logDebug('Cache file not found or invalid, fetching fresh data');
     }
 

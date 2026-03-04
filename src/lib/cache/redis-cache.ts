@@ -20,7 +20,7 @@ class RedisCache {
       if (cached) {
         return cached;
       }
-    } catch (error) {
+    } catch {
       logWarn('Redis not available, falling back to database');
     }
 
@@ -31,7 +31,7 @@ class RedisCache {
       // Try to cache in Redis for next time
       try {
         await this.setInRedis(freshData);
-      } catch (redisError) {
+      } catch {
         logWarn('Failed to cache in Redis, but continuing');
       }
       
@@ -57,7 +57,7 @@ class RedisCache {
     return null;
   }
 
-  private async setInRedis(data: DeliveryPrices): Promise<void> {
+  private async setInRedis(_data: DeliveryPrices): Promise<void> {
     // Example with ioredis:
     /*
     const Redis = require('ioredis');
@@ -101,7 +101,7 @@ class RedisCache {
   async invalidateCache(): Promise<void> {
     try {
       await this.deleteFromRedis();
-    } catch (error) {
+    } catch {
       logWarn('Failed to invalidate Redis cache');
     }
   }

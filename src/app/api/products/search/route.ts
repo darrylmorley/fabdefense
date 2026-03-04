@@ -18,7 +18,7 @@ export async function GET(request: Request) {
   try {
     const products = await searchProducts(query, limit);
 
-    const items = products.map((p: any) => ({
+    const items = products.map((p) => ({
       id: p.id,
       name: p.name,
       slug: p.slug,

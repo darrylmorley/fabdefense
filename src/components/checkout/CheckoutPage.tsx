@@ -41,6 +41,7 @@ export default function CheckoutPage() {
     } else {
       setInitialized(true);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Fire Step 1 viewed once cart is ready
@@ -48,6 +49,7 @@ export default function CheckoutPage() {
     if (initialized && cart && cart.cartItems.length > 0) {
       trackEvent("Checkout Step 1 Viewed");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialized]);
 
   // Clear error after 8 seconds

@@ -52,14 +52,13 @@ export default async function HomePage() {
   return (
     <>
       {/* JSON-LD structured data — server-generated, trusted content */}
+      {/* JSON-LD structured data — server-generated, trusted content */}
       <script
         type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: organizationSchema }}
       />
       <script
         type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: websiteSchema }}
       />
       <Hero />

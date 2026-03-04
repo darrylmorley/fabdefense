@@ -2,6 +2,7 @@
 import { captureClientError } from "@/lib/clientError";
 
 import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 
 interface SearchResult {
   id: string;
@@ -139,9 +140,11 @@ export default function ProductSearch({
             >
               <div className="flex items-start gap-3">
                 {product.image && (
-                  <img
+                  <Image
                     src={product.image}
                     alt={product.name}
+                    width={48}
+                    height={48}
                     className="w-12 h-12 object-contain bg-gray-50 rounded"
                   />
                 )}
@@ -174,7 +177,7 @@ export default function ProductSearch({
             onClick={handleSearch}
             className="w-full text-center px-4 py-2 bg-fab-aqua hover:bg-fab-aqua-hover text-white text-xs font-bold uppercase tracking-wider transition-colors"
           >
-            View all results for "{query}"
+            View all results for &quot;{query}&quot;
           </button>
         </div>
       )}

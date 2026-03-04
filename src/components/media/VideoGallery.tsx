@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, A11y } from "swiper/modules";
 import "swiper/css";
@@ -42,11 +43,12 @@ function VideoEmbed({ videoId, title }: { videoId: string; title: string }) {
             className="absolute inset-0 w-full h-full group"
             aria-label={`Play ${title}`}
           >
-            <img
+            <Image
               src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
               alt={`${title} thumbnail`}
+              width={480}
+              height={360}
               className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-              loading="lazy"
             />
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-14 h-14 rounded-full bg-fab-aqua/90 group-hover:bg-fab-aqua flex items-center justify-center transition-colors shadow-lg">

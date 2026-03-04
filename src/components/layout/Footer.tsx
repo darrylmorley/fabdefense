@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -10,11 +12,11 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Column 1 — Brand */}
           <div>
-            <a href="/" className="inline-block mb-4">
+            <Link href="/" className="inline-block mb-4">
               <span className="font-heading text-content-text font-black text-2xl uppercase tracking-tight">
                 FAB Defense
               </span>
-            </a>
+            </Link>
             <p className="text-content-text-secondary text-base leading-relaxed font-body">
               Official UK retailer for FAB Defense tactical accessories. Over 25
               years of experience in premium firearms and airsoft accessories.

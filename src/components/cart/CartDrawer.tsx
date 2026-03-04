@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useCallback, useRef } from "react";
+import Image from "next/image";
 import { useCart } from "@/context/CartContext";
 import { trackEvent } from "@/lib/analytics";
 import type { CartItem } from "@/types";
@@ -58,11 +59,12 @@ function CartItemRow({ item }: { item: CartItem }) {
         className="shrink-0 w-20 h-20 bg-content-bg overflow-hidden flex items-center justify-center"
       >
         {imageUrl ? (
-          <img
+          <Image
             src={imageUrl}
             alt={item.product.name}
+            width={80}
+            height={80}
             className="w-full h-full object-contain"
-            loading="lazy"
           />
         ) : (
           <svg

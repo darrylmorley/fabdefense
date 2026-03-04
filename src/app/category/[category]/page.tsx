@@ -88,7 +88,7 @@ export default async function CategoryPage({
   const metaDescription =
     categoryOverride?.meta_description || cat.metaDescription;
 
-  const productCards: ProductForCard[] = products.map((p: any) => ({
+  const productCards: ProductForCard[] = products.map((p) => ({
     id: p.id,
     name: p.name,
     slug: p.slug,
@@ -100,7 +100,7 @@ export default async function CategoryPage({
     categoryID: p.categoryID,
     manufacturerName: p.manufacturers?.name,
     images:
-      p.images?.map((img: any) => ({
+      p.images?.map((img) => ({
         itemID: img.itemID,
         thumbnailUrl: img.thumbnailUrl,
         mediumUrl: img.mediumUrl,

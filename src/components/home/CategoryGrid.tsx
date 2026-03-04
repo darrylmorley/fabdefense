@@ -1,3 +1,4 @@
+import Image from "next/image";
 import gripsImage from "@/assets/images/fab-defense-grips-cat.png";
 import bipodsImage from "@/assets/images/fab-defense-bipods-cat.png";
 import magazinePouchesImage from "@/assets/images/fab-defense-holsters-cat.png";
@@ -62,7 +63,7 @@ export default function CategoryGrid() {
             >
               {/* Image area */}
               <div className="absolute inset-0 bg-content-elevated group-hover:bg-content-elevated/80 transition-colors duration-300 w-100 h-100">
-                <img
+                <Image
                   width={400}
                   height={400}
                   src={category.image.src}

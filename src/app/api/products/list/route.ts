@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { FAB_DEFENSE_MANUFACTURER_ID } from "@/config/config";
 import { HIDDEN_CATEGORY_IDS } from "@/lib/constants";
 import type { SortOption } from "@/lib/api/products";
@@ -42,7 +43,7 @@ export async function GET(request: Request) {
     const categorySlug = searchParams.get("category") || null;
     const searchQuery = searchParams.get("q")?.trim() || "";
 
-    const where: any = {
+    const where: Prisma.productsWhereInput = {
       manufacturerID: FAB_DEFENSE_MANUFACTURER_ID,
       archived: false,
       images: { some: {} },
@@ -105,7 +106,7 @@ export async function GET(request: Request) {
       prisma.products.count({ where }),
     ]);
 
-    const items = products.map((p: any) => ({
+    const items = products.map((p) => ({
       id: p.id,
       name: p.name,
       slug: p.slug,
@@ -117,7 +118,7 @@ export async function GET(request: Request) {
       categoryID: p.categoryID,
       manufacturerName: p.manufacturers?.name,
       images:
-        p.images?.map((img: any) => ({
+        p.images?.map((img) => ({
           itemID: img.itemID,
           thumbnailUrl: img.thumbnailUrl,
           mediumUrl: img.mediumUrl,

@@ -29,7 +29,6 @@ function JsonLd({ json }: { json: string }) {
   return (
     <script
       type="application/ld+json"
-      /* eslint-disable-next-line react/no-danger */
       dangerouslySetInnerHTML={{ __html: json }}
     />
   );
@@ -67,7 +66,7 @@ export default async function ShopPage({
         description:
           "Browse all FAB Defense stocks, grips, rails, and more. Battle-tested tactical gear in stock and ready for UK delivery.",
         numberOfItems: total,
-        items: productCards.map((p: any, i: number) => ({
+        items: productCards.map((p, i) => ({
           position: i + 1,
           name: p.name,
           url: `${config.siteUrl}/product/${p.slug}`,
