@@ -135,7 +135,7 @@ export default function WorldpayWidget({ worldpayUrl, cartId }: Props) {
                   window.location.href = `/result?accept=exception&cartId=${cartId}`;
                   break;
                 default:
-                  captureClientError(status, "Unknown payment status:");
+                  captureClientError(status ?? "undefined", "Unknown payment status:");
                   setError("Payment status unknown. Please contact support.");
               }
             },
