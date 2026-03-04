@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { config } from "@/config/config";
 import { getCartBySession, getCurrentItemPrice } from "@/lib/api/cart";
 import { isValidUKPostcode } from "@/lib/delivery";
@@ -182,8 +183,8 @@ export async function POST(request: Request) {
         guestFirstName: shippingAddress.firstName,
         guestLastName: shippingAddress.lastName,
         guestEmail: shippingAddress.email,
-        shippingAddress: shippingAddress as unknown as Record<string, unknown>,
-        billingAddress: billingAddress as unknown as Record<string, unknown>,
+        shippingAddress: shippingAddress as unknown as Prisma.InputJsonValue,
+        billingAddress: billingAddress as unknown as Prisma.InputJsonValue,
         cartID: cart.id,
         customerID: cart.customerID,
       },
@@ -200,8 +201,8 @@ export async function POST(request: Request) {
         guestFirstName: shippingAddress.firstName,
         guestLastName: shippingAddress.lastName,
         guestEmail: shippingAddress.email,
-        shippingAddress: shippingAddress as unknown as Record<string, unknown>,
-        billingAddress: billingAddress as unknown as Record<string, unknown>,
+        shippingAddress: shippingAddress as unknown as Prisma.InputJsonValue,
+        billingAddress: billingAddress as unknown as Prisma.InputJsonValue,
       },
     });
     logger.info({ lightspeedID: cart.lightspeedID, orderRef }, "DB: sale record upserted");
