@@ -8,6 +8,7 @@ import { getCategoryProducts, type SortOption } from "@/lib/api/products";
 import { getCategoriesWithImages } from "@/lib/api/categories";
 import { generateBreadcrumbSchema, generateItemListSchema } from "@/schemas";
 import { config } from "@/config/config";
+import { sanitizeDescription } from "@/lib/utils/sanitize";
 import type { ProductForCard } from "@/types";
 
 const validSorts: SortOption[] = [
@@ -155,7 +156,7 @@ export default async function CategoryPage({
         ]}
         title={cat.name}
         total={total}
-        description={categoryIntro}
+        description={sanitizeDescription(categoryIntro)}
       />
 
       <div className="bg-white tactical-grid">
@@ -184,7 +185,7 @@ export default async function CategoryPage({
             {/* Category description is trusted CMS content from database */}
             <div
               className="prose max-w-none"
-              dangerouslySetInnerHTML={{ __html: categoryDescription }}
+              dangerouslySetInnerHTML={{ __html: sanitizeDescription(categoryDescription) }}
             />
           </div>
         </div>

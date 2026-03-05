@@ -8,6 +8,7 @@ import { getProductBySlug, getRelatedProducts } from "@/lib/api/products";
 import { deliveryCache } from "@/lib/cache/delivery-cache";
 import { generateProductSchema, generateBreadcrumbSchema } from "@/schemas";
 import { config } from "@/config/config";
+import { sanitizeDescription } from "@/lib/utils/sanitize";
 import { isMagazineProduct } from "@/lib/delivery";
 import type { ProductForCard } from "@/types";
 
@@ -238,7 +239,7 @@ export default async function ProductPage({
                   {/* Short description is trusted CMS/product data from database */}
                   <div
                     className="prose max-w-none text-content-text-secondary leading-relaxed [&_h2]:text-content-text [&_h3]:text-content-text [&_strong]:text-content-text [&_a]:text-fab-aqua [&_a:hover]:text-fab-aqua-hover [&_ul]:list-disc [&_ol]:list-decimal"
-                    dangerouslySetInnerHTML={{ __html: shortDescription }}
+                    dangerouslySetInnerHTML={{ __html: sanitizeDescription(shortDescription) }}
                   />
                 </div>
               )}
@@ -253,7 +254,7 @@ export default async function ProductPage({
               {/* Long description is trusted CMS/product data from database */}
               <div
                 className="prose max-w-none text-content-text-secondary leading-relaxed [&_h2]:text-content-text [&_h3]:text-content-text [&_strong]:text-content-text [&_a]:text-fab-aqua [&_a:hover]:text-fab-aqua-hover [&_ul]:list-disc [&_ol]:list-decimal"
-                dangerouslySetInnerHTML={{ __html: longDescription }}
+                dangerouslySetInnerHTML={{ __html: sanitizeDescription(longDescription) }}
               />
             </div>
           )}
