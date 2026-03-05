@@ -128,23 +128,50 @@ async function createCart(sessionToken: string): Promise<Cart> {
     return { ...cart, total: 0, itemCount: 0 };
   } catch (createError) {
     if ((createError as { code?: string }).code === "P2002") {
+      // Another request already created a cart with this token (race condition),
+      // or a cancelled cart exists. Find whatever is there.
       const existingCart = await prisma.carts.findFirst({
-        where: { sessionToken: sessionToken, completed: false, cancelled: false },
+        where: { sessionToken: sessionToken },
         include: cartInclude,
       });
 
       if (existingCart) {
-        return {
-          ...existingCart,
-          total: existingCart.cartItems.reduce(
-            (sum, item) => sum + item.price * item.quantity,
-            0,
-          ),
-          itemCount: existingCart.cartItems.reduce(
-            (sum, item) => sum + item.quantity,
-            0,
-          ),
-        };
+        // If the existing cart was cancelled, reset it so the customer can reuse it.
+        if (existingCart.cancelled) {
+          const DELIVERY_LIGHTSPEED_IDS = [7476, 8403, 8461];
+          await prisma.carts.update({
+            where: { id: existingCart.id },
+            data: { cancelled: false, lightspeedID: null, updatedAt: new Date() },
+          });
+          await prisma.cartItem.deleteMany({
+            where: { cartID: existingCart.id, lightspeedID: { in: DELIVERY_LIGHTSPEED_IDS } },
+          });
+          const resetCart = await prisma.carts.findFirst({
+            where: { id: existingCart.id },
+            include: cartInclude,
+          });
+          if (resetCart) {
+            return {
+              ...resetCart,
+              total: resetCart.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
+              itemCount: resetCart.cartItems.reduce((sum, item) => sum + item.quantity, 0),
+            };
+          }
+        }
+
+        if (!existingCart.completed) {
+          return {
+            ...existingCart,
+            total: existingCart.cartItems.reduce(
+              (sum, item) => sum + item.price * item.quantity,
+              0,
+            ),
+            itemCount: existingCart.cartItems.reduce(
+              (sum, item) => sum + item.quantity,
+              0,
+            ),
+          };
+        }
       }
 
       throw new Error(
