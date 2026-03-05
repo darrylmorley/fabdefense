@@ -107,7 +107,7 @@ export default function WorldpayWidget({ worldpayUrl, cartId }: Props) {
             inject: "immediate",
             target: "worldpay-payment-container",
             accessibility: true,
-            debug: true,
+            debug: false,
             resultCallback: (responseData) => {
               console.log(
                 {
@@ -285,17 +285,10 @@ export default function WorldpayWidget({ worldpayUrl, cartId }: Props) {
       <div
         id="worldpay-payment-container"
         className={
-          isLoading ? "hidden" : "w-full h-96 border border-gray-300 bg-white"
+          isLoading ? "hidden" : "w-full overflow-hidden"
         }
         style={{ minHeight: "400px" }}
       />
-
-      {/* Debug info */}
-      {!isLoading && (
-        <div className="mt-2 text-xs text-gray-500">
-          Debug: Container visible, checking for iframe...
-        </div>
-      )}
     </div>
   );
 }
