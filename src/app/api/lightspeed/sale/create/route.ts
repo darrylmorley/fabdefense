@@ -69,12 +69,14 @@ export async function POST(request: Request) {
       );
     }
 
+    // Only pass customerID if it's a real Lightspeed ID — negative values are
+    // temporary placeholders for new customers not yet synced to Lightspeed.
     const saleData = {
       employeeID,
       registerID,
       shopID,
       completed: false,
-      customerID: cart.customerID,
+      ...(cart.customerID && cart.customerID > 0 ? { customerID: cart.customerID } : {}),
       SaleLines: {
         SaleLine: cart.cartItems.map((item) => ({
           shopID,
