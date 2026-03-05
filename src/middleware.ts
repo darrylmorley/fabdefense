@@ -4,7 +4,7 @@ import { checkRateLimit, getRequestIP, RATE_LIMIT_RULES } from "@/lib/rateLimit"
 
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.worldpay.com secure.worldpay.com static.cloudflareinsights.com analytics.shootingsuppliesltd.co.uk",
+  "script-src 'self' 'unsafe-inline' *.worldpay.com secure.worldpay.com static.cloudflareinsights.com analytics.shootingsuppliesltd.co.uk",
   "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
   "font-src 'self' fonts.gstatic.com",
   "img-src 'self' data: blob: https: *.digitaloceanspaces.com *.cloudinary.com img.youtube.com",
