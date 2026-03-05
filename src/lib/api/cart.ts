@@ -90,6 +90,7 @@ export async function getCartBySession(
       where: {
         sessionToken: sessionToken,
         completed: false,
+        cancelled: false,
       },
       include: cartInclude,
     });
@@ -128,7 +129,7 @@ async function createCart(sessionToken: string): Promise<Cart> {
   } catch (createError) {
     if ((createError as { code?: string }).code === "P2002") {
       const existingCart = await prisma.carts.findFirst({
-        where: { sessionToken: sessionToken, completed: false },
+        where: { sessionToken: sessionToken, completed: false, cancelled: false },
         include: cartInclude,
       });
 
@@ -482,7 +483,7 @@ export async function getCartItemCount(sessionToken: string): Promise<number> {
   try {
     const result = await prisma.cartItem.aggregate({
       where: {
-        cart: { sessionToken: sessionToken, completed: false },
+        cart: { sessionToken: sessionToken, completed: false, cancelled: false },
       },
       _sum: { quantity: true },
     });

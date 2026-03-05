@@ -422,6 +422,18 @@ export async function cancelOrder(
       }
     }
 
+    // Reset the cart to a fresh pre-checkout state so the customer can retry.
+    // Clear cancelled + lightspeedID so a new sale is created on next checkout.
+    const DELIVERY_LIGHTSPEED_IDS = [7476, 8403, 8461];
+    await prisma.carts.update({
+      where: { id: cart.id },
+      data: { cancelled: false, lightspeedID: null, updatedAt: new Date() },
+    });
+    await prisma.cartItem.deleteMany({
+      where: { cartID: cart.id, lightspeedID: { in: DELIVERY_LIGHTSPEED_IDS } },
+    });
+    logger.info({ cartId: cart.id }, "DB: cart reset to pre-checkout state for retry");
+
     return {
       success: true,
       cartId: cart.id,
