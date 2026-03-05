@@ -42,15 +42,6 @@ export default function ResultClientEffects({
     if (isSuccess) {
       localStorage.removeItem("cart_session_token");
       window.dispatchEvent(new CustomEvent("cart-reset"));
-
-      // Backup: call the process endpoint to ensure order completion
-      if (cartId) {
-        fetch("/api/payment/worldpay/process", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ accept, cartId }),
-        }).catch(() => {});
-      }
     }
 
     // On declined/cancelled: also call process endpoint for tracking

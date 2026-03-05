@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { logger } from "@/lib/logging/logger";
+import { completeOrder } from "@/lib/orders/completeOrder";
 import ResultClientEffects from "@/components/result/ResultClientEffects";
 
 export const metadata: Metadata = {
@@ -22,17 +23,24 @@ export default async function ResultPage({
   const accept = typeof params.accept === "string" ? params.accept : undefined;
   const cartId = typeof params.cartId === "string" ? params.cartId : undefined;
 
-  const isSuccess = accept === "true";
   const isDeclined = accept === "declined";
   const isCancelled = accept === "cancelled";
-  const isException = accept === "exception";
 
+  let isSuccess = false;
+  let isException = accept === "exception";
   let orderRef: string | null = null;
   let orderTotal: number | null = null;
 
-  if (isSuccess && cartId) {
+  if (accept === "true" && cartId) {
     const lightspeedId = Number(cartId);
     if (!Number.isNaN(lightspeedId)) {
+      const result = await completeOrder(lightspeedId, "server-render");
+      isSuccess = result.success;
+      if (!result.success) {
+        isException = true;
+      }
+
+      // Look up cart for order display details
       try {
         const cart = await prisma.carts.findFirst({
           where: { lightspeedID: lightspeedId },
@@ -54,7 +62,7 @@ export default async function ResultPage({
             .reduce((sum: number, item) => sum + item.price * item.quantity, 0);
         }
       } catch (err) {
-        logger.error(err, "Failed to look up lightspeedID on result page");
+        logger.error(err, "Failed to look up cart details on result page");
       }
     }
   }

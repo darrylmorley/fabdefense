@@ -52,7 +52,7 @@ interface CartWithDetails {
 
 export async function completeOrder(
   lightspeedId: number,
-  source: "webhook" | "client-redirect",
+  source: "webhook" | "client-redirect" | "server-render",
 ): Promise<OrderCompletionResult> {
   const logPrefix = `[${source}] Order ${lightspeedId}:`;
 
@@ -379,7 +379,7 @@ async function sendConfirmationEmails(
 
 export async function cancelOrder(
   lightspeedId: number,
-  source: "webhook" | "client-redirect",
+  source: "webhook" | "client-redirect" | "server-render",
 ): Promise<OrderCompletionResult> {
   const logPrefix = `[${source}] Order ${lightspeedId}:`;
 
@@ -438,7 +438,7 @@ export async function cancelOrder(
 
 export async function markOrderRefused(
   lightspeedId: number,
-  source: "webhook" | "client-redirect",
+  source: "webhook" | "client-redirect" | "server-render",
 ): Promise<OrderCompletionResult> {
   const logPrefix = `[${source}] Order ${lightspeedId}:`;
 
