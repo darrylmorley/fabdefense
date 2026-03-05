@@ -1,5 +1,5 @@
 import Image from "next/image";
-import storyImage from "@/assets/images/fab-defense-the-best.jpg";
+import storyImage from "@/assets/images/fab-defense-the-best.webp";
 
 export default function BrandStory() {
   return (
@@ -18,14 +18,15 @@ export default function BrandStory() {
 
             <div className="text-fab-light-gray leading-relaxed space-y-4 font-body">
               <p>
-                FAB Defense is a world-renowned manufacturer of tactical gear and
-                accessories. With over 25 years of experience, our products are
-                designed and manufactured to the highest standards.
+                FAB Defense is a world-renowned manufacturer of tactical gear
+                and accessories. With over 25 years of experience, our products
+                are designed and manufactured to the highest standards.
               </p>
               <p>
                 From professional military and law enforcement to competitive
                 shooters and airsoft enthusiasts, FAB Defense accessories are
-                trusted worldwide for their durability, innovation and performance.
+                trusted worldwide for their durability, innovation and
+                performance.
               </p>
             </div>
 

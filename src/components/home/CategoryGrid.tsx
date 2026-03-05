@@ -1,10 +1,10 @@
 import Image from "next/image";
-import gripsImage from "@/assets/images/fab-defense-grips-cat.png";
+import gripsImage from "@/assets/images/fab-defense-grips-cat.webp";
 import bipodsImage from "@/assets/images/fab-defense-bipods-cat.png";
-import magazinePouchesImage from "@/assets/images/fab-defense-holsters-cat.png";
-import magazineImage from "@/assets/images/fab-defense-magazines-cat.png";
-import sightsImage from "@/assets/images/fab-defense-sights-cat.png";
-import buttstocksImage from "@/assets/images/fab-defense-buttstocks-cat.png";
+import magazinePouchesImage from "@/assets/images/fab-defense-holsters-cat.webp";
+import magazineImage from "@/assets/images/fab-defense-magazines-cat.webp";
+import sightsImage from "@/assets/images/fab-defense-sights-cat.webp";
+import buttstocksImage from "@/assets/images/fab-defense-buttstocks-cat.webp";
 
 const categories = [
   {
