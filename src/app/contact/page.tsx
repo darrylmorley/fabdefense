@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: "Contact Us | FAB Defense UK",
   description:
     "Get in touch with FAB Defense UK. Contact our expert team for product inquiries, support, and wholesale opportunities.",
+  alternates: {
+    canonical: `${config.siteUrl}/contact`,
+  },
 };
 
 export default function ContactPage() {

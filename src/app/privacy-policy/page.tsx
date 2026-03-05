@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "Privacy Policy | FAB Defense UK",
   description:
     "Read the FAB Defense UK privacy policy. Learn how we collect, use, and protect your personal data in compliance with GDPR.",
+  alternates: {
+    canonical: `${config.siteUrl}/privacy-policy`,
+  },
 };
 
 export default function PrivacyPolicyPage() {

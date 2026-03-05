@@ -31,6 +31,9 @@ export async function generateMetadata({
       product.metaDescription ||
       product.shortDescription ||
       `${product.name} from FAB Defense. Premium tactical accessory available from the official UK retailer.`,
+    alternates: {
+      canonical: `${config.siteUrl}/product/${product.slug}`,
+    },
   };
 }
 

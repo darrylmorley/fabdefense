@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: "Shop FAB Defense Tactical Accessories | UK Stock & Fast Shipping",
   description:
     "Browse all FAB Defense stocks, grips, rails, and more. Battle-tested tactical gear in stock and ready for UK delivery. Upgrade your rifle today!",
+  alternates: {
+    canonical: `${config.siteUrl}/shop`,
+  },
 };
 
 const validSorts: SortOption[] = [

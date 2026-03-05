@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "Frequently Asked Questions - FAB Defense UK",
   description:
     "Find answers to common questions about FAB Defense tactical accessories, shipping, returns, and product compatibility.",
+  alternates: {
+    canonical: `${config.siteUrl}/faqs`,
+  },
 };
 
 const faqs = [

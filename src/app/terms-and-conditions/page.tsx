@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "Terms & Conditions | FAB Defense UK",
   description:
     "Find out more about the terms and conditions for all FAB Defense tactical accessories.",
+  alternates: {
+    canonical: `${config.siteUrl}/terms-and-conditions`,
+  },
 };
 
 export default function TermsAndConditionsPage() {

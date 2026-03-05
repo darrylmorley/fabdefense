@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: "Tactical Firearms & Airsoft Accessories | FAB Defense UK",
   description:
     "Battle-tested FAB Defense tactical gear for UK shooters. From Special Ops to Rifle Clubs. World-class firearm accessories and airsoft upgrades. Shop now.",
+  alternates: {
+    canonical: "https://www.fabdefense.co.uk",
+  },
 };
 
 // Add product IDs here to feature on the homepage

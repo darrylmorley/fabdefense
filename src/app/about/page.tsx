@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: "About Us | FAB Defense UK",
   description:
     "Official UK retailer for FAB Defense tactical accessories. Premier distributor of world-class tactical equipment and weapon accessories for UK professionals and shooting enthusiasts.",
+  alternates: {
+    canonical: `${config.siteUrl}/about`,
+  },
 };
 
 export default function AboutPage() {

@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "Warranty | FAB Defense UK",
   description:
     "Find out more about the warranty coverage for all FAB Defense tactical accessories.",
+  alternates: {
+    canonical: `${config.siteUrl}/warranty`,
+  },
 };
 
 export default function WarrantyPage() {

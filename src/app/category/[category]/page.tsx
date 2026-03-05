@@ -52,6 +52,9 @@ export async function generateMetadata({
     description:
       metaDescription ||
       `Upgrade your rifle with FAB Defense ${cat.name}. Ergonomic, battle-tested equipment for AR-15, AK-47, and more. UK stock with fast shipping. Shop the range.`,
+    alternates: {
+      canonical: `${config.siteUrl}/category/${category}`,
+    },
   };
 }
 
